@@ -1,20 +1,21 @@
 import flask
-from flask import Flask, request, json
+from flask import Flask, request, render_template, url_for
+from flask_sqlalchemy import SQLAlchemy
+import sys
+import json
+from flask_heroku import Heroku
+app = Flask( __name__ )
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+heroku = Heroku(app)
+db = SQLAlchemy(app)
 
-app = Flask(__name__)
+class SpreadsheetData(db.Model):
+    __tablename__ = "spreadsheetdata"
+    id = db.Column(db.Integer, primary_key=True)
+    mydata = db.Column(db.Text())
 
-mydict = {
-	"A": { 1: "ASDF", 2: "==", 3: "=hi", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
-	"B": { 1: "Jon", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
-	"C": { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
-	"D": { 1: "1", 2: "2", 3: "=D1+D2", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
-	"E": { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
-	"F": { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
-	"G": { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
-	"H": { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
-	"I": { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" },
-	"J": { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: "", 9: "", 10: "" }
-}
+    def __init__ (self, mydata):
+        self.mydata = mydata
 
 @app.route("/")
 def index():
@@ -24,10 +25,25 @@ def index():
 
 @app.route("/exceldata", methods=['POST', 'GET'])
 def exceldata():
-	global mydict
 	if request.method == 'POST':
-		mydict = request.get_json()
-		return ""
+		indata = SpreadsheetData(request.get_json())
+		try:
+			db.session.add(indata)
+			db.session.commit()
+		except Exception as e:
+			print(e)
+			sys.stdout.flush()
+		return 'Success'
 
 	elif request.method == 'GET':
-		return json.jsonify(mydict)
+		try:
+			outdata = SpreadsheetData.query.all
+			return json.jsonify(outdata)
+		except Exception as e:
+			print(e)
+			sys.stdout.flush()
+			return 'Failure'
+
+if __name__ == ' __main__':
+	#app.debug = True
+	app.run()
