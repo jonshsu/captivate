@@ -36,7 +36,7 @@ def exceldata():
 		# return 'GET'
 		try:
 			outdata = SpreadsheetData.query.filter_by(id='1').first()
-			return json.jsonify(outdata)
+			return json.jsonify(outdata.mydata)
 		except Exception as e:
 			# print(e)
 			# sys.stdout.flush()
