@@ -2,9 +2,9 @@ import flask
 from flask import Flask, request, render_template, url_for, json
 from flask_sqlalchemy import SQLAlchemy
 import sys
-import json
 from flask_heroku import Heroku
 app = Flask( __name__ )
+app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku = Heroku(app)
 db = SQLAlchemy(app)
@@ -22,10 +22,10 @@ def exceldata():
 	if request.method == 'POST':
 		# return 'POST'
 		try:
-			indata = SpreadsheetData(str(request.get_json()))
-			# sheet = SpreadsheetData.query.filter_by(id='1').first()
-			# sheet.mydata = request.get_json()
-			db.session.add(indata)
+			# indata = SpreadsheetData(str(request.get_json()))
+			sheet = SpreadsheetData.query.filter_by(id='1').first()
+			sheet.mydata = str(request.get_json())
+			# db.session.add(indata)
 			db.session.commit()
 		except Exception as e:
 			print(e)
