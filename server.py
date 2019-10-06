@@ -35,8 +35,8 @@ def exceldata():
 		except Exception as e:
 			print(e)
 			sys.stdout.flush()
-		# return 'Success'
-		return e
+			return e
+		return 'Success'
 
 	elif request.method == 'GET':
 		try:
