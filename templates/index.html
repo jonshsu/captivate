@@ -177,7 +177,7 @@
   function fetchRemote() {
     return fetch('/exceldata')
       .then(res => res.json())
-      .then(res => JSON.parse(res));
+      .then(res => JSON.parse(res))
       .then(data => {raw_data = data});
   }
 
