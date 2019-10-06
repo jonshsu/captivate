@@ -136,7 +136,7 @@
 
   function evalFormula(cell_id, raw_string, used_cells) {
     // debugger;
-    let clean_string = raw_string.replace(" ", "");
+    let clean_string = raw_string.replace(/ /g, "");
     if(clean_string.match(/^=([A-J](10|[1-9])\+)+[A-J](10|[1-9])$/)) { // if valid expression
       // console.log("valid expr", cell_id, raw_string, used_cells);
       if(used_cells[concatId(cell_id)] == "") { // check self
@@ -177,6 +177,7 @@
   function fetchRemote() {
     return fetch('/exceldata')
       .then(res => res.json())
+      .then(res => res.replace(/'/g, '\"'))
       .then(res => JSON.parse(res))
       .then(data => {raw_data = data});
   }
