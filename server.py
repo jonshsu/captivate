@@ -28,7 +28,7 @@ def exceldata():
 	if request.method == 'POST':
 		# return 'POST'
 		try:
-			indata = SpreadsheetData(request.get_json())
+			indata = SpreadsheetData(str(request.get_json()))
 			# sheet = SpreadsheetData.query.filter_by(id='1').first()
 			# sheet.mydata = request.get_json()
 			db.session.add(indata)
