@@ -26,6 +26,7 @@ def index():
 @app.route("/exceldata", methods=['POST', 'GET'])
 def exceldata():
 	if request.method == 'POST':
+		return 'POST'
 		indata = SpreadsheetData(request.get_json())
 		try:
 			# sheet = SpreadsheetData.query.filter_by(id='1').first()
@@ -39,6 +40,7 @@ def exceldata():
 		return 'Success'
 
 	elif request.method == 'GET':
+		return 'GET'
 		try:
 			outdata = SpreadsheetData.query.filter_by(id='1').first()
 			return json.jsonify(outdata)
