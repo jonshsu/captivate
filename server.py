@@ -35,16 +35,18 @@ def exceldata():
 		except Exception as e:
 			print(e)
 			sys.stdout.flush()
-		return 'Success'
+		# return 'Success'
+		return e
 
 	elif request.method == 'GET':
 		try:
 			outdata = SpreadsheetData.query.filter_by(id='1').first()
 			return json.jsonify(outdata)
 		except Exception as e:
-			print(e)
-			sys.stdout.flush()
-			return 'Failure'
+			# print(e)
+			# sys.stdout.flush()
+			# return 'Failure'
+			return e
 
 if __name__ == ' __main__':
 	#app.debug = True
