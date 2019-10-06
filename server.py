@@ -36,7 +36,7 @@ def exceldata():
 		except Exception as e:
 			print(e)
 			sys.stdout.flush()
-			return 'POST' + e
+			return str(e)
 		return 'Success'
 
 	elif request.method == 'GET':
@@ -48,7 +48,7 @@ def exceldata():
 			# print(e)
 			# sys.stdout.flush()
 			# return 'Failure'
-			return 'GET' + e
+			return str(e)
 
 if __name__ == ' __main__':
 	app.debug = True
