@@ -26,7 +26,7 @@ def index():
 @app.route("/exceldata", methods=['POST', 'GET'])
 def exceldata():
 	if request.method == 'POST':
-		return 'POST'
+		# return 'POST'
 		indata = SpreadsheetData(request.get_json())
 		try:
 			# sheet = SpreadsheetData.query.filter_by(id='1').first()
@@ -36,7 +36,7 @@ def exceldata():
 		except Exception as e:
 			print(e)
 			sys.stdout.flush()
-			return e
+			return 'POST' + e
 		return 'Success'
 
 	elif request.method == 'GET':
@@ -48,7 +48,7 @@ def exceldata():
 			# print(e)
 			# sys.stdout.flush()
 			# return 'Failure'
-			return e
+			return 'POST' + e
 
 if __name__ == ' __main__':
 	app.debug = True
