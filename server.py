@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, request, render_template, url_for
+from flask import Flask, request, render_template, url_for, json
 from flask_sqlalchemy import SQLAlchemy
 import sys
 import json
@@ -27,8 +27,8 @@ def index():
 def exceldata():
 	if request.method == 'POST':
 		# return 'POST'
-		indata = SpreadsheetData(request.get_json())
 		try:
+			indata = SpreadsheetData(request.get_json())
 			# sheet = SpreadsheetData.query.filter_by(id='1').first()
 			# sheet.mydata = request.get_json()
 			db.session.add(indata)
@@ -40,7 +40,7 @@ def exceldata():
 		return 'Success'
 
 	elif request.method == 'GET':
-		return 'GET'
+		# return 'GET'
 		try:
 			outdata = SpreadsheetData.query.filter_by(id='1').first()
 			return json.jsonify(outdata)
@@ -48,7 +48,7 @@ def exceldata():
 			# print(e)
 			# sys.stdout.flush()
 			# return 'Failure'
-			return 'POST' + e
+			return 'GET' + e
 
 if __name__ == ' __main__':
 	app.debug = True
