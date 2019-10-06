@@ -8,6 +8,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 
+# database model
 from models import SpreadsheetData
 
 @app.route("/")
@@ -16,6 +17,7 @@ def index():
 	columns = [chr(i+ord('A')) for i in range(10)]
 	return flask.render_template('index.html', rows=rows, columns=columns)
 
+# update and retrieve data
 @app.route("/exceldata", methods=['POST', 'GET'])
 def exceldata():
 	if request.method == 'POST':
