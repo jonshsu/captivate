@@ -19,28 +19,19 @@ def index():
 @app.route("/exceldata", methods=['POST', 'GET'])
 def exceldata():
 	if request.method == 'POST':
-		# return 'POST'
 		try:
-			# indata = SpreadsheetData(str(request.get_json()))
 			sheet = SpreadsheetData.query.filter_by(id='1').first()
 			sheet.mydata = str(request.get_json())
-			# db.session.add(indata)
 			db.session.commit()
 		except Exception as e:
-			print(e)
-			sys.stdout.flush()
 			return str(e)
 		return 'Success'
 
 	elif request.method == 'GET':
-		# return 'GET'
 		try:
 			outdata = SpreadsheetData.query.filter_by(id='1').first()
 			return json.jsonify(outdata.mydata)
 		except Exception as e:
-			# print(e)
-			# sys.stdout.flush()
-			# return 'Failure'
 			return str(e)
 
 if __name__ == ' __main__':

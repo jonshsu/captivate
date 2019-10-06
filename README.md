@@ -1,43 +1,47 @@
-# Building an Interactive Spreadsheet
 
-Today, the vast majority of businesses implement their commission plan models
-in Microsoft Excel, Google Sheets, or some other spreadsheet software. In this
-problem, you will implement a simplified browser-based spreadsheet that can be
-used to implement an extremely simple financial model.
+# CaptivateIQ Coding Challenge
+Jonathan Hsu
+10/5/2019
 
-# Requirements
+## Overview
+For this project I built an interactive spreadsheet using the template provided. You can view the live demo at [https://jonathanhsu.me/OLD/captivate/](https://jonathanhsu.me/OLD/captivate/). Spreadsheet data is stored as  json {"A": {"1": "celldata", ... }, ... }.
 
-* For simplicity, the size of the spreadsheet is fixed to 10 rows and 10
-  columns.
-  	- Columns are named after capital letters, starting with "A".
-	- Rows are numbered and increasing, starting from "1".
-* The state of the spreadsheet should be maintained in a backend service that
-  is mutatable via API calls.
-* The frontend should be interactive: saving data after a cell in the
-  spreadsheet changes, and updating any affected cells with their newly
-  computed values.
-* The state of the spreadsheet should be persisted across server restarts.
-* Cell values should support either an integer or a simple formula that
-  references other cells and only needs to support addition.
-    - For example, `-1` and `123` should be able to be stored in a cell.
-    - `=A1+B1` should be able to be stored in a cell, and the display value
-      should be the result of evaluating the sum of the value in `A1` and
-      the value in `B1`.
+The live demo is a static page that gets/updates spreadsheet data through javascript fetches to [https://jsonbin.io](https://jsonbin.io/). I did this because I ran out of free Google Cloud credit for running a Flask app and database, and the single html page worked for this project. The html file is from the the rendered Flask page and I just changed the get/update functions to fetch from jsonbin instead of the server's endpoint.
 
-# Out-of-scope
+In the github repo, `index.html` in the root dir is the demo page I uploaded. You can run the server with the same setup instructions as in the original readme provided. I added routes in `server.py` for getting/updating the spreadsheet data through the server. `templates/index.html` contains the same javascript as in index.html. If I were to actually run a server/database for handling the data, I would need to update the route functions in `server.py` to get/put instead of using a global dict. 
 
-* Don't worry about handling multiple concurrent users viewing and editing the
-  spreadsheet at the same time.
+### Functionality 
+The spreadsheet json is loaded once initially and then replaced/updated whenever the user makes changes. All the actual spreadshet logic is handled by the browser and can be found in the `<script>` tags in either `index.html` file. 
 
-# Background
+I handle arithmetic expressions by generating a new object
+`display_data` from the fetched `raw_data` object. Cells display `display_data`, which holds the parsed/evaluated arithmetic expressions. When you click on a cell, its data is switched to `raw_data` for editing, and you can edit a cell's `raw_data` through the top bar as well. When you de-focus the cell or press enter, the  expression is evaluated, the cell switches to the new `display_data` and sends the new `raw_data` to the server. Here's a flowchart of how user interactions work in my code:
 
-The sample code distributed with this package is provided to you as a starting
-point if you'd like to use it.
 
-## Setup
+The spreadsheet can handle any number of cell additions (ex. "=A1+B2+B2+C3+..."), and cells with invalid expressions (ex. "=HELLO", "=A1-B1") show up as "Invalid". Cells with circular or self-references show up as "Circular". Here's how evaluating/calculating these expressions works:
 
-1. Set up your virtualenv: `virtualenv -p python3 interview_venv`
-2. Source the `activate` script: `source interview_venv/bin/activate`
-3. Install the dependencies in your virtualenv:
-   `pip install -r requirements.txt`
-4. Run the server `FLASK_DEBUG=1 FLASK_APP=server.py flask run`
+
+
+Features:
+- When a user clicks a cell, 
+
+Python/Flask
+Serverless, database, gsheet
+  requests go directly to jsonbin.io because I can't host, secret key
+  all of the logic is done on frontend inline script
+setup/run/demo, website
+
+functionality
+  summary behavior/assumptions - like excel/sheets
+  logic flowchart
+  evalFormula
+  demo
+
+Conclusions
+  future work, scalability, efficiency
+  how I would architect/build an actual collaborative sheets-like environment
+    nodejs, CRDT
+  related work
+    frontend/bootstrap:
+      Obviously bootstrap one-day frontend
+      Picnichealth react one-day frontend
+      Mango forum node.js backend 
